@@ -1,6 +1,6 @@
-#Stream Router Service
+# Stream Router Service
 
-##This dataflow realized abstract referral system.
+## This dataflow realized abstract referral system.
 
 Implementation of [NATS subjects] (MQ Publisher-Subscriber model) data waterfall as described on the image. 
 
@@ -10,7 +10,7 @@ Implementation of [NATS subjects] (MQ Publisher-Subscriber model) data waterfall
 The nodes of unary tree is a NATS subject wired with user input (Producers).
 Data always move from child to parent nodes with possibility filtering first level children individually. 
 
-###Basic Endpoints
+### Basic Endpoints
 
 1. **POST** ``/api/subject/create`` - create new child.
 
