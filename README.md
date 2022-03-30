@@ -2,7 +2,7 @@
 
 ##This dataflow realized abstract referral system.
 
-Implementation of [https://docs.nats.io/nats-concepts/subjects] [NATS subjects] data waterfall as described on proof_of_concept img.
+Implementation of [NATS subjects] (MQ Publisher-Subscriber model) data waterfall as described on the image. 
 
 <img src="proof_of_concept.png" width="800" alt="Data spread"/>
 
