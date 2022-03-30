@@ -2,7 +2,7 @@
 
 ##This dataflow realized abstract referral system.
 
-Implementation of NATS [https://docs.nats.io/nats-concepts/subjects] [NATS subjects] data waterfall as described on proof_of_concept img.
+Implementation of [https://docs.nats.io/nats-concepts/subjects] [NATS subjects] data waterfall as described on proof_of_concept img.
 
 <img src="proof_of_concept.png" width="800" alt="Data spread"/>
 
@@ -12,3 +12,4 @@ Data always move from child to parent nodes with possibility filtering first lev
 
 
 
+[NATS subjects]:https://docs.nats.io/nats-concepts/subjects
