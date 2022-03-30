@@ -6,6 +6,7 @@ import com.example.streamrouter.repositiry.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,11 @@ import java.time.LocalDateTime;
 public class SubjectServiceImpl implements SubjectService {
 
     private final SubjectRepository subjectRepository;
+
+    @Override
+    public Flux<Subject> findAll() {
+        return subjectRepository.findAll();
+    }
 
     @Override
     public Mono<Subject> findById(@NotNull String id) {
@@ -45,7 +51,6 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Mono<Void> delete(@NotNull String id) {
-        return subjectRepository.deleteById(id)
-                .switchIfEmpty(Mono.error(new NotFoundException(id)));
+        return subjectRepository.deleteById(id);
     }
 }
