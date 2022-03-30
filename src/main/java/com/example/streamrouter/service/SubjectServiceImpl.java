@@ -36,17 +36,18 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Mono<Subject> update(@NotNull String id, @NotNull Mono<Subject> subject) {
+    public Mono<Subject> update(@NotNull String id, @NotNull Mono<Subject> updated) {
         return subjectRepository
                 .findById(id)
                 .switchIfEmpty(
                         Mono.error(new NotFoundException(id)))
-                .doOnNext(s ->
-                        new Subject(id,
-                                s.getRoute(),
-                                s.getCreatedDate(),
-                                LocalDateTime.now())
-                ).flatMap(subjectRepository::save);
+                .flatMap(origin ->
+                        updated.doOnNext(s -> {
+                            s.setId(id);
+                            s.setCreatedDate(origin.getCreatedDate());
+                            s.setUpdatedDate(LocalDateTime.now());
+                        }))
+                .flatMap(subjectRepository::save);
     }
 
     @Override
