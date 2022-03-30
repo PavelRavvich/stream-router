@@ -1,6 +1,19 @@
 package com.example.streamrouter.model;
 
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public record Subject(UUID id, String route) {
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Document(collection = "subjects")
+public class Subject {
+    @Id
+    private String id;
+
+    private String route;
 }

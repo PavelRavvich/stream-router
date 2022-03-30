@@ -3,6 +3,8 @@ package com.example.streamrouter.handler;
 import com.example.streamrouter.model.PageableRequest;
 import com.example.streamrouter.model.PageableResponse;
 import com.example.streamrouter.model.Subject;
+import com.example.streamrouter.service.SubjectService;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -15,16 +17,19 @@ import java.util.Map;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class SubjectHandler {
+
+    private final SubjectService subjectService;
 
     @NotNull
     public Mono<ServerResponse> getList(@NotNull ServerRequest request) {
         Mono<PageableRequest> pageableRequest = request.bodyToMono(PageableRequest.class);
 
         List<Subject> list = List.of(
-                new Subject(UUID.randomUUID(), "test.route.1"),
-                new Subject(UUID.randomUUID(), "test.route.2"),
-                new Subject(UUID.randomUUID(), "test.route.3"));
+                new Subject(UUID.randomUUID().toString(), "test.route.1"),
+                new Subject(UUID.randomUUID().toString(), "test.route.2"),
+                new Subject(UUID.randomUUID().toString(), "test.route.3"));
         Mono<PageableResponse<Subject>> data = Mono.just(
                 new PageableResponse<>(1L, list));
 
@@ -35,10 +40,10 @@ public class SubjectHandler {
     }
 
     @NotNull
-    public Mono<ServerResponse> getSubject(@NotNull ServerRequest request) {
+    public Mono<ServerResponse> getById(@NotNull ServerRequest request) {
         String id = request.pathVariable("id");
         Mono<Subject> data = Mono
-                .just(new Subject(UUID.fromString(id), "test.route.*"));
+                .just(new Subject(id, "test.route.*"));
 
         return ServerResponse
                 .ok()
@@ -47,8 +52,9 @@ public class SubjectHandler {
     }
 
     @NotNull
-    public Mono<ServerResponse> createSubject(@NotNull ServerRequest request) {
-        Mono<Subject> data = request.bodyToMono(Subject.class);
+    public Mono<ServerResponse> create(@NotNull ServerRequest request) {
+        Mono<Subject> data = subjectService
+                .create(request.bodyToMono(Subject.class));
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -56,7 +62,7 @@ public class SubjectHandler {
     }
 
     @NotNull
-    public Mono<ServerResponse> updateSubject(@NotNull ServerRequest request) {
+    public Mono<ServerResponse> update(@NotNull ServerRequest request) {
         String id = request.pathVariable("id");
         Mono<Subject> data = request.bodyToMono(Subject.class);
         return ServerResponse
@@ -66,7 +72,7 @@ public class SubjectHandler {
     }
 
     @NotNull
-    public Mono<ServerResponse> deleteSubject(@NotNull ServerRequest request) {
+    public Mono<ServerResponse> delete(@NotNull ServerRequest request) {
         UUID id = UUID.fromString(request.pathVariable("id"));
         Mono<Map<String, UUID>> data = Mono.just(Map.of("id", id));
         return ServerResponse
