@@ -25,7 +25,7 @@ public class SubjectRouter {
                 .route(
                         RequestPredicates.GET("/subject/list")
                                 .and(accept(MediaType.APPLICATION_JSON)),
-                        subjectHandler::getList)
+                        subjectHandler::getListByRoutePattern)
                 .andRoute(
                         RequestPredicates.GET("/subject/{id}")
                                 .and(accept(MediaType.APPLICATION_JSON)),

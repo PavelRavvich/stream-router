@@ -5,7 +5,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface SubjectService {
-    Flux<Subject> findAll();
+    Flux<Subject> findByRoutePattern(String routePattern);
     Mono<Subject> findById(String id);
     Mono<Subject> create(Mono<Subject> subject);
     Mono<Subject> update(String id, Mono<Subject> subject);

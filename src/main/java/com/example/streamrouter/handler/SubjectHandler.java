@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -19,16 +20,14 @@ public class SubjectHandler {
     private final SubjectService subjectService;
 
     @NotNull
-    public Mono<ServerResponse> getList(@NotNull ServerRequest request) {
-//        Mono<PageableRequest> pageableRequest = request.bodyToMono(PageableRequest.class);
-//
-//        List<Subject> list = List.of();
-//        Mono<PageableResponse<Subject>> data = Mono.just(
-//                new PageableResponse<>(1L, list));
+    public Mono<ServerResponse> getListByRoutePattern(@NotNull ServerRequest request) {
+        Flux<Subject> data = subjectService.findByRoutePattern(
+                request.queryParam("pattern")
+                        .orElse(""));
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(subjectService.findAll(), Subject.class);
+                .body(data, Subject.class);
     }
 
     @NotNull

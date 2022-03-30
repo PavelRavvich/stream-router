@@ -18,8 +18,8 @@ public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository subjectRepository;
 
     @Override
-    public Flux<Subject> findAll() {
-        return subjectRepository.findAll();
+    public Flux<Subject> findByRoutePattern(@NotNull String routePattern) {
+        return subjectRepository.findByRouteContains(routePattern);
     }
 
     @Override
