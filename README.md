@@ -7,8 +7,8 @@ Implementation of [NATS subjects] (MQ Publisher-Subscriber model) data waterfall
 <img src="proof_of_concept.png" width="800" alt="Data spread"/>
 
 
-The nodes of unary tree is a NATS subject wired with user input (Producers).
-Data always move from child to parent nodes with possibility filtering first level children individually. 
+The nodes of the unary tree is a NATS subject wired with user input (Producers).
+Data always move from child to parent nodes with possibility filtering first level children manually by parent. 
 
 ### Basic Endpoints
 
@@ -17,7 +17,7 @@ Data always move from child to parent nodes with possibility filtering first lev
 _Request:_
 ```json
 {
-  "subjectSuffix": "childProducer",
+  "route": "childProducer",
   "parentId": "62445e1f5ea3d56b3fbbcde6"
 }
 ```
@@ -26,7 +26,7 @@ _Response:_
 ```json
 {
   "id": "62445e1f5ea3d56b3fbbcde6",
-  "subjectSuffix": "parentProducerRoute.childProducerRoute",
+  "route": "parentProducerRoute.childProducerRoute",
   "parentId": "62445e1f5ea3d56b3fbbcde6"
 }
 ```
