@@ -19,7 +19,7 @@ _Request:_
 {}
 ```
 
-**POST** ``/api/subject/{name}/children`` - return all bottom of tree from requested node as list.
+**POST** ``/api/subject/{name}/children`` - find node by name and return all children nodes as list.
 
 _Request:_
 ```json
@@ -40,7 +40,7 @@ _Response:_
 }
 ```
 
-_Response:_ For parent ``node2`` we're getting all children by parent name.
+_Response:_ For parent ``node2`` return all children by parent name.
 
 Statuses
 
