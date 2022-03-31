@@ -32,15 +32,16 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Mono<Subject> create(@NotNull Mono<Subject> subject) {
         return subject
-                .flatMap(child -> subjectRepository
-                        .findById(child.getParentId())
-                        .flatMap(parent -> {
-                            child.setParentId(parent.getId());
-                            child.setStatus(Subject.Status.OPEN);
-                            child.setCreatedDate(LocalDateTime.now());
-                            child.setRoute(Utils.buildRoute(child, parent));
-                            return subjectRepository.insert(child);
-                        }));
+                .flatMap(child ->
+                        subjectRepository.findById(child.getParentId())
+                                .map(parent -> {
+                                    child.setParentId(parent.getId());
+                                    child.setStatus(Subject.Status.OPEN);
+                                    child.setCreatedDate(LocalDateTime.now());
+                                    child.setRoute(Utils.buildRoute(child, parent));
+                                    return child;
+                                }))
+                .flatMap(subjectRepository::insert);
     }
 
     @Override
