@@ -1,6 +1,5 @@
 package com.example.streamrouter.handler;
 
-import com.example.streamrouter.exceptions.BadRequestException;
 import com.example.streamrouter.model.Subject;
 import com.example.streamrouter.service.SubjectService;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +23,7 @@ public class SubjectHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
                         subjectService.findByRoutePattern(
-                                request.queryParam("name")
-                                        .orElseThrow(() ->
-                                                new BadRequestException("name param require"))),
+                                request.pathVariable("name")),
                         Subject.class);
     }
 

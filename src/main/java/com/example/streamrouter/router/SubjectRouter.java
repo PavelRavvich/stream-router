@@ -27,13 +27,14 @@ public class SubjectRouter {
                                 .and(accept(MediaType.APPLICATION_JSON)),
                         subjectHandler::findChildrenByParentName)
                 .andRoute(
-                        RequestPredicates.POST("/api/subject/{id}")
-                                .and(accept(MediaType.APPLICATION_JSON)),
-                        subjectHandler::findOneById
-                ).andRoute(
                         RequestPredicates.POST("/api/subject/create")
                                 .and(accept(MediaType.APPLICATION_JSON)),
                         subjectHandler::create
+                )
+                .andRoute(
+                        RequestPredicates.POST("/api/subject/{id}")
+                                .and(accept(MediaType.APPLICATION_JSON)),
+                        subjectHandler::findOneById
                 ).andRoute(
                         RequestPredicates.POST("/api/subject/{id}/status/{status}")
                                 .and(accept(MediaType.APPLICATION_JSON)),

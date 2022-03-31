@@ -29,30 +29,18 @@ public class SubjectServiceImpl implements SubjectService {
                 .switchIfEmpty(Mono.error(new NotFoundException(id)));
     }
 
-    /**
-     "name": "node3",
-     "parentId": "62445e1f5ea3d56b3fbbcde6"
-
-
-     "id": "62445e1f5ea3d56b3fbbcde6",
-     "name": "node3",
-     "status": "OK | WARN | STOP",
-     "route": "node1.node2.node3.*",
-     "parentId": "62445e1f5ea3d56b3fbbcde6",
-     "createdDate": "2022-03-30T16:41:51.608",
-     "updatedDate": "2022-03-30T16:41:51.608"
-     */
     @Override
     public Mono<Subject> create(@NotNull Mono<Subject> subject) {
         return subject
-                .flatMap(insert -> findById(insert.getParentId()))
-                .flatMap(parent ->
-                        subject.doOnNext(child -> {
+                .flatMap(child -> subjectRepository
+                        .findById(child.getParentId())
+                        .flatMap(parent -> {
                             child.setParentId(parent.getId());
-                            child.setRoute(Utils.buildRoute(child, parent));
+                            child.setStatus(Subject.Status.OPEN);
                             child.setCreatedDate(LocalDateTime.now());
-                        }))
-                .flatMap(subjectRepository::insert);
+                            child.setRoute(Utils.buildRoute(child, parent));
+                            return subjectRepository.insert(child);
+                        }));
     }
 
     @Override
