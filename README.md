@@ -12,11 +12,32 @@ It's dataflow scheme where events move from child to parent:
 
 ### Endpoints
 
-**GET** ``/api/subjectsTree/{rootName}`` - return all bottom of tree from requested node as list.
+**POST** ``/api/subject/{id}`` - find one subject by id.
 
 _Request:_
 ```json
 {}
+```
+
+**POST** ``/api/subject/{name}/children`` - return all bottom of tree from requested node as list.
+
+_Request:_
+```json
+{}
+```
+
+_Response:_
+
+```json
+{
+    "id": "62445e1f5ea3d56b3fbbcde6",
+    "name": "node3",
+    "status": "OPEN",
+    "route": "node1.node2.node3.*",
+    "parentId": "62445e1f5ea3d56b3fbbcde6",
+    "createdDate": "2022-03-30T16:41:51.608",
+    "updatedDate": "2022-03-30T16:41:51.608"
+}
 ```
 
 _Response:_ For parent ``node2`` we're getting all children by parent name.
@@ -35,7 +56,8 @@ Statuses
     "status": "OPEN",
     "route": "node1.node2.node3.*",
     "parentId": "62445e1f5ea3d56b3fbbcde6",
-    "createdDate": "2022-03-30T16:41:51.608"
+    "createdDate": "2022-03-30T16:41:51.608",
+    "updatedDate": "2022-03-30T16:41:51.608"
   },
   {
     "id": "62445e1f5ea3d56b3fbbcde6",
@@ -43,7 +65,8 @@ Statuses
     "status": "WARN",
     "route": "node1.node2.node4.*",
     "parentId": "62445e1f5ea3d56b3fbbcde6",
-    "createdDate": "2022-03-30T16:41:51.608"
+    "createdDate": "2022-03-30T16:41:51.608",
+    "updatedDate": "2022-03-30T16:41:51.608"
   },
   {
     "id": "62445e1f5ea3d56b3fbbcde6",
@@ -51,12 +74,13 @@ Statuses
     "status": "CLOSE",
     "route": "node1.node2.node3.node5.*",
     "parentId": "62445e1f5ea3d56b3fbbcde6",
-    "createdDate": "2022-03-30T16:41:51.608"
+    "createdDate": "2022-03-30T16:41:51.608",
+    "updatedDate": "2022-03-30T16:41:51.608"
   }
 ]
 ```
 
-**POST** ``/api/subjectsTree/createNode`` - create new child.
+**POST** ``/api/subject/create`` - create new child.
 
 _Request:_
 ```json
@@ -71,14 +95,15 @@ _Response:_
 {
   "id": "62445e1f5ea3d56b3fbbcde6",
   "name": "node3",
-  "status": "OK | WARN | STOP",
+  "status": "OPEN | WARN | CLOSE",
   "route": "node1.node2.node3.*",
   "parentId": "62445e1f5ea3d56b3fbbcde6",
-  "createdDate": "2022-03-30T16:41:51.608"
+  "createdDate": "2022-03-30T16:41:51.608",
+  "updatedDate": "2022-03-30T16:41:51.608"
 }
 ```
 
-**PUT** ``/api/subjectsTree/updateNode/{childId}?status=WARN`` - block\unblock child subtree.
+**POST** ``/api/subject/{id}/status/{status}`` - block\unblock child subtree.
 
 _Request:_
 ```json

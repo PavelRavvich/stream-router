@@ -23,25 +23,21 @@ public class SubjectRouter {
     public RouterFunction<ServerResponse> route(SubjectHandler subjectHandler) {
         return RouterFunctions
                 .route(
-                        RequestPredicates.GET("/subject/list")
+                        RequestPredicates.POST("/api/subject/{name}/children")
                                 .and(accept(MediaType.APPLICATION_JSON)),
-                        subjectHandler::getListByRoutePattern)
+                        subjectHandler::findChildrenByParentName)
                 .andRoute(
-                        RequestPredicates.GET("/subject/{id}")
+                        RequestPredicates.POST("/api/subject/{id}")
                                 .and(accept(MediaType.APPLICATION_JSON)),
-                        subjectHandler::getById
+                        subjectHandler::findOneById
                 ).andRoute(
-                        RequestPredicates.POST("/subject")
+                        RequestPredicates.POST("/api/subject/create")
                                 .and(accept(MediaType.APPLICATION_JSON)),
                         subjectHandler::create
                 ).andRoute(
-                        RequestPredicates.PUT("/subject/{id}")
+                        RequestPredicates.POST("/api/subject/{id}/status/{status}")
                                 .and(accept(MediaType.APPLICATION_JSON)),
-                        subjectHandler::update
-                ).andRoute(
-                        RequestPredicates.DELETE("/subject/{id}")
-                                .and(accept(MediaType.APPLICATION_JSON)),
-                        subjectHandler::delete
+                        subjectHandler::updateStatus
                 );
     }
 

@@ -1,5 +1,6 @@
 package com.example.streamrouter.handler;
 
+import com.example.streamrouter.exceptions.BadRequestException;
 import com.example.streamrouter.model.Subject;
 import com.example.streamrouter.service.SubjectService;
 import lombok.RequiredArgsConstructor;
@@ -8,10 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -20,18 +18,20 @@ public class SubjectHandler {
     private final SubjectService subjectService;
 
     @NotNull
-    public Mono<ServerResponse> getListByRoutePattern(@NotNull ServerRequest request) {
-        Flux<Subject> data = subjectService.findByRoutePattern(
-                request.queryParam("pattern")
-                        .orElse(""));
+    public Mono<ServerResponse> findChildrenByParentName(@NotNull ServerRequest request) {
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(data, Subject.class);
+                .body(
+                        subjectService.findByRoutePattern(
+                                request.queryParam("name")
+                                        .orElseThrow(() ->
+                                                new BadRequestException("name param require"))),
+                        Subject.class);
     }
 
     @NotNull
-    public Mono<ServerResponse> getById(@NotNull ServerRequest request) {
+    public Mono<ServerResponse> findOneById(@NotNull ServerRequest request) {
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -54,25 +54,16 @@ public class SubjectHandler {
     }
 
     @NotNull
-    public Mono<ServerResponse> update(@NotNull ServerRequest request) {
+    public Mono<ServerResponse> updateStatus(@NotNull ServerRequest request) {
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
                         subjectService
-                                .update(
+                                .updateStatus(
                                         request.pathVariable("id"),
-                                        request.bodyToMono(Subject.class)),
+                                        Subject.Status.valueOf(request.pathVariable("status"))),
                         Subject.class);
     }
 
-    @NotNull
-    public Mono<ServerResponse> delete(@NotNull ServerRequest request) {
-        return ServerResponse
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(
-                        subjectService.delete(request.pathVariable("id")),
-                        Map.class);
-    }
 }

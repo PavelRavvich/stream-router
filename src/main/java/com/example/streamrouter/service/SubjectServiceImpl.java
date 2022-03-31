@@ -3,6 +3,7 @@ package com.example.streamrouter.service;
 import com.example.streamrouter.exceptions.NotFoundException;
 import com.example.streamrouter.model.Subject;
 import com.example.streamrouter.repositiry.SubjectRepository;
+import com.example.streamrouter.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -28,30 +29,39 @@ public class SubjectServiceImpl implements SubjectService {
                 .switchIfEmpty(Mono.error(new NotFoundException(id)));
     }
 
+    /**
+     "name": "node3",
+     "parentId": "62445e1f5ea3d56b3fbbcde6"
+
+
+     "id": "62445e1f5ea3d56b3fbbcde6",
+     "name": "node3",
+     "status": "OK | WARN | STOP",
+     "route": "node1.node2.node3.*",
+     "parentId": "62445e1f5ea3d56b3fbbcde6",
+     "createdDate": "2022-03-30T16:41:51.608",
+     "updatedDate": "2022-03-30T16:41:51.608"
+     */
     @Override
     public Mono<Subject> create(@NotNull Mono<Subject> subject) {
         return subject
-                .doOnNext(s -> s.setCreatedDate(LocalDateTime.now()))
+                .flatMap(insert -> findById(insert.getParentId()))
+                .flatMap(parent ->
+                        subject.doOnNext(child -> {
+                            child.setParentId(parent.getId());
+                            child.setRoute(Utils.buildRoute(child, parent));
+                            child.setCreatedDate(LocalDateTime.now());
+                        }))
                 .flatMap(subjectRepository::insert);
     }
 
     @Override
-    public Mono<Subject> update(@NotNull String id, @NotNull Mono<Subject> updated) {
-        return subjectRepository
-                .findById(id)
-                .switchIfEmpty(
-                        Mono.error(new NotFoundException(id)))
-                .flatMap(origin ->
-                        updated.doOnNext(s -> {
-                            s.setId(id);
-                            s.setCreatedDate(origin.getCreatedDate());
-                            s.setUpdatedDate(LocalDateTime.now());
-                        }))
+    public Mono<Subject> updateStatus(@NotNull String id, @NotNull Subject.Status status) {
+        return findById(id)
+                .doOnNext(origin -> {
+                    origin.setStatus(status);
+                    origin.setUpdatedDate(LocalDateTime.now());
+                })
                 .flatMap(subjectRepository::save);
-    }
-
-    @Override
-    public Mono<Void> delete(@NotNull String id) {
-        return subjectRepository.deleteById(id);
     }
 }

@@ -17,9 +17,22 @@ public class Subject {
     @Id
     private String id;
 
+    private Status status;
+
+    private String name;
+
     private String route;
+
+    private String parentId;
 
     private LocalDateTime createdDate;
 
     private LocalDateTime updatedDate;
+
+    public enum Status {
+        OPEN("OPEN"), WARN("WARN"), CLOSE("CLOSE");
+
+        Status(String v) {
+        }
+    }
 }

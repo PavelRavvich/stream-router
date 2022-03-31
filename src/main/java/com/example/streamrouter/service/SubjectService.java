@@ -8,6 +8,5 @@ public interface SubjectService {
     Flux<Subject> findByRoutePattern(String routePattern);
     Mono<Subject> findById(String id);
     Mono<Subject> create(Mono<Subject> subject);
-    Mono<Subject> update(String id, Mono<Subject> subject);
-    Mono<Void> delete(String id);
+    Mono<Subject> updateStatus(String id, Subject.Status status);
 }
