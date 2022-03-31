@@ -23,9 +23,9 @@ _Response:_ For parent ``node2`` we're getting all children by parent name.
 
 Statuses
 
-1. OPEN - data stream open.
-2. WARN - notification about problem but stream still open.
-3. CLOSE - notification obout problem and stream close.
+1. **OPEN** - data stream open.
+2. **WARN** - notification about problem but stream still open.
+3. **CLOSE** - notification obout problem and stream close.
 
 ```json
 [
