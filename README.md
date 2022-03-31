@@ -12,12 +12,56 @@ Data always move from child to parent nodes with possibility filtering first lev
 
 ### Basic Endpoints
 
-1. **POST** ``/api/subject/create`` - create new child.
+**GET** ``/api/subjectsTree/{rootName}`` - return all bottom of tree from requested node as list.
+
+_Request:_
+```json
+{}
+```
+
+_Response:_ For parent ``node2`` we're getting all children by parent name.
+
+Statuses
+
+1. OPEN - data stream open.
+2. WARN - notification about problem but stream still open.
+3. CLOSE - notification obout problem and stream close.
+
+```json
+[
+  {
+    "id": "62445e1f5ea3d56b3fbbcde6",
+    "name": "node3",
+    "status": "OPEN",
+    "route": "node1.node2.node3.*",
+    "parentId": "62445e1f5ea3d56b3fbbcde6",
+    "createdDate": "2022-03-30T16:41:51.608"
+  },
+  {
+    "id": "62445e1f5ea3d56b3fbbcde6",
+    "name": "node4",
+    "status": "WARN",
+    "route": "node1.node2.node4.*",
+    "parentId": "62445e1f5ea3d56b3fbbcde6",
+    "createdDate": "2022-03-30T16:41:51.608"
+  },
+  {
+    "id": "62445e1f5ea3d56b3fbbcde6",
+    "name": "node5",
+    "status": "CLOSE",
+    "route": "node1.node2.node3.node5.*",
+    "parentId": "62445e1f5ea3d56b3fbbcde6",
+    "createdDate": "2022-03-30T16:41:51.608"
+  }
+]
+```
+
+**POST** ``/api/subjectsTree/createNode`` - create new child.
 
 _Request:_
 ```json
 {
-  "route": "childProducer",
+  "name": "node3",
   "parentId": "62445e1f5ea3d56b3fbbcde6"
 }
 ```
@@ -26,29 +70,24 @@ _Response:_
 ```json
 {
   "id": "62445e1f5ea3d56b3fbbcde6",
-  "route": "parentProducerRoute.childProducerRoute",
-  "parentId": "62445e1f5ea3d56b3fbbcde6"
+  "name": "node3",
+  "status": "OK | WARN | STOP",
+  "route": "node1.node2.node3.*",
+  "parentId": "62445e1f5ea3d56b3fbbcde6",
+  "createdDate": "2022-03-30T16:41:51.608"
 }
 ```
 
-2. **POST** ``/api/subject/children/{route}`` - return all bottom of tree from requested node.
+**PUT** ``/api/subjectsTree/updateNode/{childId}?status=WARN`` - block\unblock child subtree.
 
 _Request:_
 ```json
 {}
 ```
-
 _Response:_
 ```json
-[
-  {
-    "id": "62445e1f5ea3d56b3fbbcde6",
-    "subjectSuffix": "parentProducerRoute.childProducerRoute",
-    "parentId": "62445e1f5ea3d56b3fbbcde6"
-  }
-]
+{}
 ```
 
-3. TODO filters
 
 [NATS subjects]:https://docs.nats.io/nats-concepts/subjects
