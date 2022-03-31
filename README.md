@@ -2,15 +2,15 @@
 
 ## This dataflow realized abstract referral system.
 
-Implementation of [NATS subjects] (MQ Publisher-Subscriber model) data waterfall as described on the image. 
+API for store a relationships of [NATS subjects] (MQ based on Publisher-Subscriber model).
+Each node of unary tree is **Subject** (Similar to Kafka Topic) where parent can listen all children and children of children.
+And can block any first level child (Call **FILTER** on the image bellow).
+It's dataflow scheme where events move from child to parent:
 
 <img src="proof_of_concept.png" width="800" alt="Data spread"/>
 
 
-The nodes of the unary tree is a NATS subject wired with user input (Producers).
-Data always move from child to parent nodes with possibility filtering first level children manually by parent. 
-
-### Basic Endpoints
+### Endpoints
 
 **GET** ``/api/subjectsTree/{rootName}`` - return all bottom of tree from requested node as list.
 
