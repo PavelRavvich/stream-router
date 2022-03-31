@@ -19,6 +19,20 @@ _Request:_
 {}
 ```
 
+_Response:_
+
+```json
+{
+  "id": "62445e1f5ea3d56b3fbbcde6",
+  "name": "node3",
+  "status": "OPEN",
+  "route": "node1.node2.node3.*",
+  "parentId": "62445e1f5ea3d56b3fbbcde6",
+  "createdDate": "2022-03-30T16:41:51.608",
+  "updatedDate": "2022-03-30T16:41:51.608"
+}
+```
+
 **POST** ``/api/subject/{name}/children`` - find node by name and return all children nodes as list.
 
 _Request:_
@@ -26,27 +40,13 @@ _Request:_
 {}
 ```
 
-_Response:_
-
-```json
-{
-    "id": "62445e1f5ea3d56b3fbbcde6",
-    "name": "node3",
-    "status": "OPEN",
-    "route": "node1.node2.node3.*",
-    "parentId": "62445e1f5ea3d56b3fbbcde6",
-    "createdDate": "2022-03-30T16:41:51.608",
-    "updatedDate": "2022-03-30T16:41:51.608"
-}
-```
-
 _Response:_ For parent ``node2`` return all children by parent name.
 
-Statuses
+_Statuses_
 
 1. **OPEN** - data stream open.
-2. **WARN** - notification about problem but stream still open.
-3. **CLOSE** - notification obout problem and stream close.
+2. **WARN** - stream open and notification marker about problem.
+3. **CLOSE** - stream closed and notification marker about problem and .
 
 ```json
 [
